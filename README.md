@@ -1,2 +1,2 @@
 # go-chargify
-Gol wrapper for Chargify. Currently only targets Customers and Subscriptions.
+Go wrapper for Chargify. Currently only targets Customers and Subscriptions.
