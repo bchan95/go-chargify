@@ -1,70 +1,75 @@
 package chargify
 
-import "context"
+import (
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+	"net/http"
+)
 
 type SubscriptionRequest struct {
-	Request       SubscriptionCreate
-	CancelRequest SubscriptionCancel
+	Request       *SubscriptionCreate
+	CancelRequest *SubscriptionCancel
 }
 
 type SubscriptionCreate struct {
-	ProductHandle                 string                 `json:"product_handle"`
-	ProductID                     string                 `json:"product_id"`
-	Ref                           string                 `json:"ref"`
-	CouponCode                    string                 `json:"coupon_code"`
-	PaymentCollectionMethod       string                 `json:"payment_collection_method"`
-	ReceivesInvoiceEmails         bool                   `json:"receives_invoice_emails"`
-	NetTerms                      string                 `json:"net_terms"`
-	CustomerID                    string                 `json:"customer_id"`
-	NextBillingAt                 string                 `json:"next_billing_at"`
-	StoredCredentialTransactionID int64                  `json:"stored_credential_transaction_id"`
-	PaymentProfileID              string                 `json:"payment_profile_id"`
-	CustomerAttributes            Customer               `json:"customer_attributes"`
-	CreditCardAttributes          CreditCard             `json:"credit_card_attributes"`
-	BankAccountAttributes         BankAccount            `json:"bank_account_attributes"`
-	Components                    []*Component           `json:"components"`
-	CalendarBilling               CalendarBilling        `json:"calendar_billing"`
-	Metafields                    SubscriptionMetafields `json:"metafields"`
+	ProductHandle                 string                  `json:"product_handle"`
+	ProductID                     string                  `json:"product_id"`
+	Ref                           string                  `json:"ref"`
+	CouponCode                    string                  `json:"coupon_code"`
+	PaymentCollectionMethod       string                  `json:"payment_collection_method"`
+	ReceivesInvoiceEmails         bool                    `json:"receives_invoice_emails"`
+	NetTerms                      string                  `json:"net_terms"`
+	CustomerID                    string                  `json:"customer_id"`
+	NextBillingAt                 string                  `json:"next_billing_at"`
+	StoredCredentialTransactionID int64                   `json:"stored_credential_transaction_id"`
+	PaymentProfileID              string                  `json:"payment_profile_id"`
+	CustomerAttributes            *Customer               `json:"customer_attributes"`
+	CreditCardAttributes          *CreditCard             `json:"credit_card_attributes"`
+	BankAccountAttributes         *BankAccount            `json:"bank_account_attributes"`
+	Components                    []*Component            `json:"components"`
+	CalendarBilling               *CalendarBilling        `json:"calendar_billing"`
+	Metafields                    *SubscriptionMetafields `json:"metafields"`
 }
 
 type SubscriptionResponse struct {
-	ID                            int64      `json:"id"`
-	State                         string     `json:"state"`
-	BalanceInCents                int64      `json:"balance_in_cents"`
-	TotalRevenueInCents           int64      `json:"total_revenue_in_cents"`
-	ProductPriceInCents           int64      `json:"product_price_in_cents"`
-	ProductVersionNumber          int64      `json:"product_version_number"`
-	CurrentPeriodEndsAt           string     `json:"current_period_ends_at"`
-	NextAssessmentAt              string     `json:"next_assessment_at"`
-	TrialStartedAt                string     `json:"trial_started_at"`
-	TrialEndedAt                  string     `json:"trial_ended_at"`
-	ActivatedAt                   string     `json:"activated_at"`
-	CreatedAt                     string     `json:"created_at"`
-	UpdatedAt                     string     `json:"updated_at"`
-	CancellationMessage           string     `json:"cancellation_message"`
-	CancellationMethod            string     `json:"cancellation_method"`
-	CancelAtEndOfPeriod           bool       `json:"cancel_at_end_of_period"`
-	CanceledAt                    string     `json:"canceled_at"`
-	CurrentPeriodStartedAt        string     `json:"current_period_started_at"`
-	PreviousState                 string     `json:"previous_state"`
-	SignupPaymentID               int64      `json:"signup_payment_id"`
-	SignupRevenue                 string     `json:"signup_revenue"`
-	DelayedCancelAt               string     `json:"delayed_cancel_at"`
-	CouponCode                    string     `json:"coupon_code"`
-	PaymentCollectionMethod       string     `json:"payment_collection_method"`
-	SnapDay                       string     `json:"snap_day"`
-	ReasonCode                    string     `json:"reason_code"`
-	ReceivesInvoiceEmails         bool       `json:"receives_invoice_emails"`
-	Customer                      Customer   `json:"customer"`
-	Product                       Product    `json:"product"`
-	CreditCard                    CreditCard `json:"credit_card"`
-	PaymentType                   string     `json:"payment_type"`
-	ReferralCode                  string     `json:"referral_code"`
-	NextProductID                 int64      `json:"next_product_id"`
-	CouponUseCount                int64      `json:"coupon_use_count"`
-	CouponUsesAllowed             int64      `json:"coupon_uses_allowed"`
-	NextProductHandle             string     `json:"next_product_handle"`
-	StoredCredentialTransactionID int64      `json:"stored_credential_transaction_id"`
+	ID                            int64       `json:"id"`
+	State                         string      `json:"state"`
+	BalanceInCents                int64       `json:"balance_in_cents"`
+	TotalRevenueInCents           int64       `json:"total_revenue_in_cents"`
+	ProductPriceInCents           int64       `json:"product_price_in_cents"`
+	ProductVersionNumber          int64       `json:"product_version_number"`
+	CurrentPeriodEndsAt           string      `json:"current_period_ends_at"`
+	NextAssessmentAt              string      `json:"next_assessment_at"`
+	TrialStartedAt                string      `json:"trial_started_at"`
+	TrialEndedAt                  string      `json:"trial_ended_at"`
+	ActivatedAt                   string      `json:"activated_at"`
+	CreatedAt                     string      `json:"created_at"`
+	UpdatedAt                     string      `json:"updated_at"`
+	CancellationMessage           string      `json:"cancellation_message"`
+	CancellationMethod            string      `json:"cancellation_method"`
+	CancelAtEndOfPeriod           bool        `json:"cancel_at_end_of_period"`
+	CanceledAt                    string      `json:"canceled_at"`
+	CurrentPeriodStartedAt        string      `json:"current_period_started_at"`
+	PreviousState                 string      `json:"previous_state"`
+	SignupPaymentID               int64       `json:"signup_payment_id"`
+	SignupRevenue                 string      `json:"signup_revenue"`
+	DelayedCancelAt               string      `json:"delayed_cancel_at"`
+	CouponCode                    string      `json:"coupon_code"`
+	PaymentCollectionMethod       string      `json:"payment_collection_method"`
+	SnapDay                       string      `json:"snap_day"`
+	ReasonCode                    string      `json:"reason_code"`
+	ReceivesInvoiceEmails         bool        `json:"receives_invoice_emails"`
+	Customer                      *Customer   `json:"customer"`
+	Product                       *Product    `json:"product"`
+	CreditCard                    *CreditCard `json:"credit_card"`
+	PaymentType                   string      `json:"payment_type"`
+	ReferralCode                  string      `json:"referral_code"`
+	NextProductID                 int64       `json:"next_product_id"`
+	CouponUseCount                int64       `json:"coupon_use_count"`
+	CouponUsesAllowed             int64       `json:"coupon_uses_allowed"`
+	NextProductHandle             string      `json:"next_product_handle"`
+	StoredCredentialTransactionID int64       `json:"stored_credential_transaction_id"`
 }
 
 type SubscriptionCancel struct {
@@ -75,33 +80,33 @@ type SubscriptionCancel struct {
 }
 
 type Product struct {
-	ID                      int64            `json:"id"`
-	Name                    string           `json:"name"`
-	Handle                  string           `json:"handle"`
-	Description             string           `json:"description"`
-	AccountingCode          string           `json:"accounting_code"`
-	PriceInCents            int64            `json:"price_in_cents"`
-	Interval                int64            `json:"interval"`
-	IntervalUnit            string           `json:"interval_unit"`
-	InitialChargeInCents    int64            `json:"initial_charge_in_cents"`
-	ExpirationInterval      int64            `json:"expiration_interval"`
-	ExpirationIntervalUnit  string           `json:"expiration_interval_unit"`
-	TrialPriceInCents       int64            `json:"trial_price_in_cents"`
-	TrialInterval           int64            `json:"trial_interval"`
-	TrialIntervalUnit       string           `json:"trial_interval_unit"`
-	InitialChargeAfterTrial bool             `json:"initial_charge_after_trial"`
-	ReturnParams            string           `json:"return_params"`
-	RequestCreditCard       bool             `json:"request_credit_card"`
-	RequireCreditCard       bool             `json:"require_credit_card"`
-	CreatedAt               string           `json:"created_at"`
-	UpdatedAt               string           `json:"updated_at"`
-	ArchivedAt              string           `json:"archived_at"`
-	UpdateReturnURL         string           `json:"update_return_url"`
-	UpdateReturnParams      string           `json:"update_return_params"`
-	ProductFamily           ProductFamily    `json:"product_family"`
-	PublicSignupPage        PublicSignupPage `json:"public_signup_page"`
-	Taxable                 bool             `json:"taxable"`
-	VersionNumber           int64            `json:"version_number"`
+	ID                      int64             `json:"id"`
+	Name                    string            `json:"name"`
+	Handle                  string            `json:"handle"`
+	Description             string            `json:"description"`
+	AccountingCode          string            `json:"accounting_code"`
+	PriceInCents            int64             `json:"price_in_cents"`
+	Interval                int64             `json:"interval"`
+	IntervalUnit            string            `json:"interval_unit"`
+	InitialChargeInCents    int64             `json:"initial_charge_in_cents"`
+	ExpirationInterval      int64             `json:"expiration_interval"`
+	ExpirationIntervalUnit  string            `json:"expiration_interval_unit"`
+	TrialPriceInCents       int64             `json:"trial_price_in_cents"`
+	TrialInterval           int64             `json:"trial_interval"`
+	TrialIntervalUnit       string            `json:"trial_interval_unit"`
+	InitialChargeAfterTrial bool              `json:"initial_charge_after_trial"`
+	ReturnParams            string            `json:"return_params"`
+	RequestCreditCard       bool              `json:"request_credit_card"`
+	RequireCreditCard       bool              `json:"require_credit_card"`
+	CreatedAt               string            `json:"created_at"`
+	UpdatedAt               string            `json:"updated_at"`
+	ArchivedAt              string            `json:"archived_at"`
+	UpdateReturnURL         string            `json:"update_return_url"`
+	UpdateReturnParams      string            `json:"update_return_params"`
+	ProductFamily           *ProductFamily    `json:"product_family"`
+	PublicSignupPage        *PublicSignupPage `json:"public_signup_page"`
+	Taxable                 bool              `json:"taxable"`
+	VersionNumber           int64             `json:"version_number"`
 }
 
 type ProductFamily struct {
@@ -169,18 +174,131 @@ type SubscriptionMetafields struct {
 	Comments string `json:"comments"`
 }
 
-func (req *SubscriptionRequest) Create(ctx context.Context, client *Client) (response *SubscriptionResponse, err error) {
+func (req *SubscriptionRequest) Create(client Client) (response *SubscriptionResponse, err error) {
+	if req.Request == nil {
+		return nil, errors.New("missing request")
+	}
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(req.Request)
+	if err != nil {
+		return
+	}
+	var res *http.Response
+	res, err = client.Post(jsonReq, "")
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response)
 	return
 }
 
-func (req *SubscriptionRequest) Update(ctx context.Context, client *Client) (response *SubscriptionResponse, err error) {
+func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
+	if subscriptionID == "" {
+		return nil, errors.New("no id")
+	}
+	if req.Request == nil {
+		return nil, errors.New("missing request")
+	}
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(req.Request)
+	if err != nil {
+		return
+	}
+	var res *http.Response
+	res, err = client.Put(jsonReq, subscriptionID)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response)
 	return
 }
 
-func GetSubscription(ctx context.Context, client *Client, subscriptionID string) (response *SubscriptionResponse, err error) {
+func GetSubscription(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
+	if subscriptionID == "" {
+		return nil, errors.New("no id")
+	}
+	var res *http.Response
+	res, err = client.Get(subscriptionID)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response)
 	return
 }
 
-func (req SubscriptionRequest) Cancel(ctx context.Context, client *Client) (response *SubscriptionResponse, err error) {
+func (req *SubscriptionRequest) CancelDelayed(client Client) (err error) {
+	if req.CancelRequest == nil {
+		return errors.New("missing request")
+	}
+	if req.CancelRequest.subscriptionID == "" {
+		return errors.New("no id")
+	}
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(req.CancelRequest)
+	if err != nil {
+		return
+	}
+	_, err = client.Post(jsonReq, req.CancelRequest.subscriptionID)
+	return
+}
+
+func (req *SubscriptionRequest) CancelNow(client Client) (response *SubscriptionResponse, err error) {
+	if req.CancelRequest == nil {
+		return nil, errors.New("missing request")
+	}
+	if req.CancelRequest.subscriptionID == "" {
+		return nil, errors.New("no id")
+	}
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(req.CancelRequest)
+	if err != nil {
+		return
+	}
+	var res *http.Response
+	res, err = client.Delete(jsonReq, req.CancelRequest.subscriptionID)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response)
 	return
 }

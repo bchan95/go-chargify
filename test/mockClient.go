@@ -2,7 +2,7 @@
 // Source: backend-services/chargify (interfaces: Client)
 
 // Package mock_chargify is a generated GoMock package.
-package mock_chargify
+package test
 
 import (
 	gomock "github.com/golang/mock/gomock"
@@ -60,16 +60,16 @@ func (mr *MockClientMockRecorder) Get(arg0 interface{}) *gomock.Call {
 }
 
 // Post mocks base method
-func (m *MockClient) Post(arg0 []byte) (*http.Response, error) {
-	ret := m.ctrl.Call(m, "Post", arg0)
+func (m *MockClient) Post(arg0 []byte, arg1 string) (*http.Response, error) {
+	ret := m.ctrl.Call(m, "Post", arg0, arg1)
 	ret0, _ := ret[0].(*http.Response)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Post indicates an expected call of Post
-func (mr *MockClientMockRecorder) Post(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Post", reflect.TypeOf((*MockClient)(nil).Post), arg0)
+func (mr *MockClientMockRecorder) Post(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Post", reflect.TypeOf((*MockClient)(nil).Post), arg0, arg1)
 }
 
 // Put mocks base method
