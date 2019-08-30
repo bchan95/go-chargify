@@ -18,6 +18,8 @@ func checkError(res *http.Response) error {
 	switch code {
 	case 200:
 		return nil
+	case 204:
+		return nil
 	case 422:
 		return extractErr(res.Body)
 	case 404:
@@ -31,6 +33,7 @@ func (e *Error) Error() string {
 	return strings.Join(e.Errors, ", ")
 }
 
+// extracts the description of an error from the body of a response
 func extractErr(body io.ReadCloser) *Error {
 	defer body.Close()
 	byteBody, err := ioutil.ReadAll(body)

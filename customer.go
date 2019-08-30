@@ -38,8 +38,7 @@ type Metafield struct {
 	MetafieldName string `json:"metafield_name"`
 }
 
-
-func GetCustomer(client Client, customerID int64) (customer *Customer, err error){
+func GetCustomer(client Client, customerID int64) (customer *Customer, err error) {
 	if customerID == 0 {
 		return nil, errors.NoID()
 	}
@@ -60,5 +59,90 @@ func GetCustomer(client Client, customerID int64) (customer *Customer, err error
 	}
 	customer = new(Customer)
 	err = json.Unmarshal(body, customer)
+	return
+}
+
+func GetAllCustomers(client Client) (customers []*Customer, err error) {
+	uri := "customers.json"
+	var res *http.Response
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, &customers)
+	return
+}
+
+func GetCustomerSubscriptions(client Client, customerID int64) (subscriptions []*SubscriptionResponse, err error) {
+	if customerID == 0 {
+		return nil, errors.NoID()
+	}
+	uri := fmt.Sprintf("customers/%d/subscriptions.json", customerID)
+	var res *http.Response
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, &subscriptions)
+	return
+}
+
+func (c *Customer) Update(client Client, customerID int64) (err error) {
+	if customerID == 0 {
+		return errors.NoID()
+	}
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(c)
+	if err != nil {
+		return
+	}
+	uri := fmt.Sprintf("customers/%d.json", customerID)
+	var res *http.Response
+	res, err = client.Put(jsonReq, uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, c)
+	return
+}
+
+func DeleteCustomer(client Client, customerID int64) (err error) {
+	if customerID == 0 {
+		return errors.NoID()
+	}
+	uri := fmt.Sprintf("customers/%d.json", customerID)
+	var res *http.Response
+	res, err = client.Delete(nil, uri)
+	if err != nil {
+		return
+	}
+	err = checkError(res)
 	return
 }
