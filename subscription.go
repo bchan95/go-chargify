@@ -3,6 +3,7 @@ package chargify
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -285,7 +286,8 @@ func (req *SubscriptionRequest) CancelNow(client Client) (response *Subscription
 		return
 	}
 	var res *http.Response
-	res, err = client.Delete(jsonReq, req.CancelRequest.subscriptionID)
+	uri := fmt.Sprintf("%s/delayed_cancel", req.CancelRequest.subscriptionID)
+	res, err = client.Delete(jsonReq, uri)
 	if err != nil {
 		return
 	}
