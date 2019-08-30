@@ -1,5 +1,13 @@
 package chargify
 
+import (
+	"backend-services/error"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
 type Customer struct {
 	FirstName                string       `json:"first_name"`
 	LastName                 string       `json:"last_name"`
@@ -28,4 +36,29 @@ type Customer struct {
 
 type Metafield struct {
 	MetafieldName string `json:"metafield_name"`
+}
+
+
+func GetCustomer(client Client, customerID int64) (customer *Customer, err error){
+	if customerID == 0 {
+		return nil, errors.NoID()
+	}
+	var res *http.Response
+	uri := fmt.Sprintf("customers/%d.json", customerID)
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	customer = new(Customer)
+	err = json.Unmarshal(body, customer)
+	return
 }

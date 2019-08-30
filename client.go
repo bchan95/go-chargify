@@ -42,16 +42,12 @@ func (ba *withBasicAuth) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func (c *client) Get(uri string) (*http.Response, error) {
-	return c.httpClient.Get(fmt.Sprintf("%s/subscriptions/%s.json", c.url, uri))
+	return c.httpClient.Get(fmt.Sprintf("%s/%s", c.url, uri))
 }
 
 func (c *client) Post(body []byte, uri string) (*http.Response, error) {
 	var reqPath string
-	if uri != "" {
-		reqPath = fmt.Sprintf("%s/subscriptions/%s.json", c.url, uri)
-	} else {
-		reqPath = fmt.Sprintf("%s/subscriptions.json", c.url)
-	}
+	reqPath = fmt.Sprintf("%s/%s", c.url, uri)
 	req, err := http.NewRequest("POST", reqPath, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
@@ -60,7 +56,7 @@ func (c *client) Post(body []byte, uri string) (*http.Response, error) {
 }
 
 func (c *client) Put(body []byte, uri string) (*http.Response, error) {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/subscriptions/%s.json", c.url, uri), bytes.NewReader(body))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", c.url, uri), bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +64,7 @@ func (c *client) Put(body []byte, uri string) (*http.Response, error) {
 }
 
 func (c *client) Delete(body []byte, uri string) (*http.Response, error) {
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/subscriptions/%s.json", c.url, uri), bytes.NewReader(body))
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/%s", c.url, uri), bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
