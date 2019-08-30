@@ -1,7 +1,6 @@
 package chargify
 
 import (
-	"backend-services/error"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -40,7 +39,7 @@ type Metafield struct {
 
 func GetCustomer(client Client, customerID int64) (customer *Customer, err error) {
 	if customerID == 0 {
-		return nil, errors.NoID()
+		return nil, NoID()
 	}
 	var res *http.Response
 	uri := fmt.Sprintf("customers/%d.json", customerID)
@@ -84,7 +83,7 @@ func GetAllCustomers(client Client) (customers []*Customer, err error) {
 
 func GetCustomerSubscriptions(client Client, customerID int64) (subscriptions []*SubscriptionResponse, err error) {
 	if customerID == 0 {
-		return nil, errors.NoID()
+		return nil, NoID()
 	}
 	uri := fmt.Sprintf("customers/%d/subscriptions.json", customerID)
 	var res *http.Response
@@ -107,7 +106,7 @@ func GetCustomerSubscriptions(client Client, customerID int64) (subscriptions []
 
 func (c *Customer) Update(client Client, customerID int64) (err error) {
 	if customerID == 0 {
-		return errors.NoID()
+		return NoID()
 	}
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(c)
@@ -135,7 +134,7 @@ func (c *Customer) Update(client Client, customerID int64) (err error) {
 
 func DeleteCustomer(client Client, customerID int64) (err error) {
 	if customerID == 0 {
-		return errors.NoID()
+		return NoID()
 	}
 	uri := fmt.Sprintf("customers/%d.json", customerID)
 	var res *http.Response

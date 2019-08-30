@@ -1,5 +1,11 @@
 package chargify
 
+import (
+	"backend-services/error"
+	"fmt"
+	"net/http"
+)
+
 type Product struct {
 	ID                      int64             `json:"id"`
 	Name                    string            `json:"name"`
@@ -36,4 +42,13 @@ type ProductFamily struct {
 	Handle      string `json:"handle"`
 	AccountCode string `json:"account_code"`
 	Description string `json:"description"`
+}
+
+func GetProduct(client Client, productID string) (product *Product, err error) {
+	if productID == "" {
+		return nil, NoID()
+	}
+	uri := fmt.Sprintf("products/%s.json", productID)
+	var res *http.Response
+	res, err = client.Get(uri)
 }

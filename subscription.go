@@ -167,7 +167,7 @@ func (req *SubscriptionRequest) Create(client Client) (response *SubscriptionRes
 
 func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
 	if subscriptionID == "" {
-		return nil, errors.New("no id")
+		return nil, NoID()
 	}
 	if req.Request == nil {
 		return nil, errors.New("missing request")
@@ -199,10 +199,10 @@ func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (re
 
 func GetSubscription(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
 	if subscriptionID == "" {
-		return nil, errors.New("no id")
+		return nil, NoID()
 	}
 	var res *http.Response
-	uri := fmt.Sprintf("subscriptions/%s.json", uri)
+	uri := fmt.Sprintf("subscriptions/%s.json", subscriptionID)
 	res, err = client.Get(uri)
 	if err != nil {
 		return
@@ -226,14 +226,13 @@ func (req *SubscriptionRequest) CancelDelayed(client Client) (err error) {
 		return errors.New("missing request")
 	}
 	if req.CancelRequest.subscriptionID == "" {
-		return errors.New("no id")
+		return NoID()
 	}
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(req.CancelRequest)
 	if err != nil {
 		return
 	}
-
 	uri := fmt.Sprintf("subscriptions/%s/delayed_cancel.json", req.CancelRequest.subscriptionID)
 	_, err = client.Post(jsonReq, uri)
 	return
@@ -244,7 +243,7 @@ func (req *SubscriptionRequest) CancelNow(client Client) (response *Subscription
 		return nil, errors.New("missing request")
 	}
 	if req.CancelRequest.subscriptionID == "" {
-		return nil, errors.New("no id")
+		return nil, NoID()
 	}
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(req.CancelRequest)

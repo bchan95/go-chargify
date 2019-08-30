@@ -55,3 +55,7 @@ func extractErr(body io.ReadCloser) *Error {
 	}
 	return extractedErrs
 }
+
+func NoID() error {
+	return errors.New("no ID provided")
+}
