@@ -104,9 +104,9 @@ func GetCustomerSubscriptions(client Client, customerID int64) (subscriptions []
 	return
 }
 
-func (c *Customer) Update(client Client, customerID int64) (err error) {
+func (c *Customer) Update(client Client, customerID int64) (customer *Customer, err error) {
 	if customerID == 0 {
-		return NoID()
+		return nil, NoID()
 	}
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(c)
@@ -128,7 +128,8 @@ func (c *Customer) Update(client Client, customerID int64) (err error) {
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(body, c)
+	customer = new(Customer)
+	err = json.Unmarshal(body, customer)
 	return
 }
 

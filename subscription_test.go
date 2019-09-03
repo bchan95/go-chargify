@@ -65,7 +65,7 @@ func TestSubscriptionRequest_Create(t *testing.T) {
 			args: args{
 				client: client,
 				stub: func() {
-					client.EXPECT().Post(gomock.Any(), "").Return(&http.Response{
+					client.EXPECT().Post(gomock.Any(), "subscriptions.json").Return(&http.Response{
 						StatusCode: 200,
 						Body:       ioutil.NopCloser(bytes.NewReader(body)),
 					}, nil)
@@ -151,7 +151,7 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 				client:         client,
 				subscriptionID: "123456789",
 				stub: func() {
-					client.EXPECT().Put(gomock.Any(), "123456789").Return(&http.Response{
+					client.EXPECT().Put(gomock.Any(), "subscriptions/123456789.json").Return(&http.Response{
 						StatusCode: 200,
 						Body:       ioutil.NopCloser(bytes.NewReader(body)),
 					}, nil)
@@ -168,7 +168,7 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 		},
 		{
 			name:    "create no id",
-			wantErr: errors.New("no id"),
+			wantErr: NoID(),
 		},
 	}
 	for _, tt := range tests {
@@ -224,7 +224,7 @@ func TestGetSubscription(t *testing.T) {
 				client:         client,
 				subscriptionID: "123456789",
 				stub: func() {
-					client.EXPECT().Get("123456789").Return(&http.Response{
+					client.EXPECT().Get("subscriptions/123456789.json").Return(&http.Response{
 						StatusCode: 200,
 						Body:       ioutil.NopCloser(bytes.NewReader(body)),
 					}, nil)
@@ -234,7 +234,7 @@ func TestGetSubscription(t *testing.T) {
 		},
 		{
 			name:    "create no id",
-			wantErr: errors.New("no id"),
+			wantErr: NoID(),
 		},
 	}
 	for _, tt := range tests {
@@ -296,7 +296,7 @@ func TestSubscriptionRequest_CancelNow(t *testing.T) {
 			args: args{
 				client: client,
 				stub: func() {
-					client.EXPECT().Delete(gomock.Any(), "123456789").Return(
+					client.EXPECT().Delete(gomock.Any(), "subscriptions/123456789.json").Return(
 						&http.Response{
 							StatusCode: 200,
 							Body:       ioutil.NopCloser(bytes.NewReader(body)),
@@ -317,7 +317,7 @@ func TestSubscriptionRequest_CancelNow(t *testing.T) {
 					CancellationMessage: "GOOD DAY SIR",
 				},
 			},
-			wantErr: errors.New("no id"),
+			wantErr: NoID(),
 		},
 	}
 	for _, tt := range tests {
@@ -370,7 +370,7 @@ func TestSubscriptionRequest_CancelDelayed(t *testing.T) {
 			args: args{
 				client: client,
 				stub: func() {
-					client.EXPECT().Post(gomock.Any(), "123456789").Return(nil, nil)
+					client.EXPECT().Post(gomock.Any(), "subscriptions/123456789/delayed_cancel.json").Return(nil, nil)
 				},
 			},
 		},
@@ -386,7 +386,7 @@ func TestSubscriptionRequest_CancelDelayed(t *testing.T) {
 					CancellationMessage: "GOOD DAY SIR",
 				},
 			},
-			wantErr: errors.New("no id"),
+			wantErr: NoID(),
 		},
 	}
 	for _, tt := range tests {

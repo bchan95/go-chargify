@@ -1,8 +1,10 @@
 package chargify
 
 import (
-	"backend-services/error"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -44,11 +46,50 @@ type ProductFamily struct {
 	Description string `json:"description"`
 }
 
-func GetProduct(client Client, productID string) (product *Product, err error) {
-	if productID == "" {
+func GetProductByID(client Client, productID int64) (product *Product, err error) {
+	if productID == 0 {
 		return nil, NoID()
 	}
-	uri := fmt.Sprintf("products/%s.json", productID)
+	uri := fmt.Sprintf("products/%d.json", productID)
 	var res *http.Response
 	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	product = new(Product)
+	err = json.Unmarshal(body, product)
+	return
+}
+
+func GetProductByHandle(client Client, handle string) (product *Product, err error) {
+	if handle == "" {
+		return nil, errors.New("no handle provided")
+	}
+	uri := fmt.Sprintf("products/handle/%s.json", handle)
+	var res *http.Response
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	product = new(Product)
+	err = json.Unmarshal(body, product)
+	return
 }
