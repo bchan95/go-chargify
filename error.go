@@ -18,6 +18,8 @@ func checkError(res *http.Response) error {
 	switch code {
 	case 200:
 		return nil
+	case 201:
+		return nil
 	case 204:
 		return nil
 	case 422:

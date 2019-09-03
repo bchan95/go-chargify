@@ -37,7 +37,8 @@ func WithBasicAuth(rt http.RoundTripper, apiKey string) *withBasicAuth {
 	}
 }
 func (ba *withBasicAuth) RoundTrip(req *http.Request) (*http.Response, error) {
-	req.SetBasicAuth(ba.apiKey, "X")
+	req.SetBasicAuth(ba.apiKey, "x")
+	req.Header.Add("content-type", "application/json")
 	return ba.rt.RoundTrip(req)
 }
 

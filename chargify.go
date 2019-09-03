@@ -3,6 +3,7 @@ package chargify
 import (
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -16,6 +17,7 @@ func NewClient(subdomain string) (Client, error) {
 		return nil, errors.New("no subdomain specified")
 	}
 	url := constructUrl(subdomain)
+	log.Println(url)
 	httpClient := http.DefaultClient
 
 	rt := WithBasicAuth(httpClient.Transport, apiKey)
