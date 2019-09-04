@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type Customer struct {
+type CustomerBody struct {
 	FirstName                string       `json:"first_name,omitempty"`
 	LastName                 string       `json:"last_name,omitempty"`
 	Email                    string       `json:"email,omitempty"`
@@ -31,6 +31,10 @@ type Customer struct {
 	VatNumber                string       `json:"vat_number,omitempty"`
 	ParentID                 int64        `json:"parent_id,omitempty"`
 	Metafields               []*Metafield `json:"metafields,omitempty"`
+}
+
+type Customer struct {
+	Customer *CustomerBody `json:"customer"`
 }
 
 type Metafield struct {

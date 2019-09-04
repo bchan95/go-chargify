@@ -288,7 +288,7 @@ func TestSubscriptionRequest_CancelNow(t *testing.T) {
 			name: "cancel",
 			fields: fields{
 				CancelRequest: &SubscriptionCancel{
-					subscriptionID:      "123456789",
+					SubscriptionID:      "123456789",
 					ReasonCode:          "r1",
 					CancellationMessage: "GOOD DAY SIR",
 				},
@@ -362,7 +362,7 @@ func TestSubscriptionRequest_CancelDelayed(t *testing.T) {
 			name: "cancel delayed",
 			fields: fields{
 				CancelRequest: &SubscriptionCancel{
-					subscriptionID:      "123456789",
+					SubscriptionID:      "123456789",
 					ReasonCode:          "r1",
 					CancellationMessage: "GOOD DAY SIR",
 				},

@@ -26,7 +26,7 @@ type SubscriptionCreate struct {
 	NextBillingAt                 string                  `json:"next_billing_at,omitempty"`
 	StoredCredentialTransactionID int64                   `json:"stored_credential_transaction_id,omitempty"`
 	PaymentProfileID              string                  `json:"payment_profile_id,omitempty"`
-	CustomerAttributes            *Customer               `json:"customer_attributes,omitempty"`
+	CustomerAttributes            *CustomerBody           `json:"customer_attributes,omitempty"`
 	CreditCardAttributes          *CreditCard             `json:"credit_card_attributes,omitempty"`
 	BankAccountAttributes         *BankAccount            `json:"bank_account_attributes,omitempty"`
 	Components                    []*Component            `json:"components,omitempty"`
@@ -35,43 +35,43 @@ type SubscriptionCreate struct {
 }
 
 type SubscriptionResponse struct {
-	ID                            int64       `json:"id,omitempty"`
-	State                         string      `json:"state,omitempty"`
-	BalanceInCents                int64       `json:"balance_in_cents,omitempty"`
-	TotalRevenueInCents           int64       `json:"total_revenue_in_cents,omitempty"`
-	ProductPriceInCents           int64       `json:"product_price_in_cents,omitempty"`
-	ProductVersionNumber          int64       `json:"product_version_number,omitempty"`
-	CurrentPeriodEndsAt           string      `json:"current_period_ends_at,omitempty"`
-	NextAssessmentAt              string      `json:"next_assessment_at,omitempty"`
-	TrialStartedAt                string      `json:"trial_started_at,omitempty"`
-	TrialEndedAt                  string      `json:"trial_ended_at,omitempty"`
-	ActivatedAt                   string      `json:"activated_at,omitempty"`
-	CreatedAt                     string      `json:"created_at,omitempty"`
-	UpdatedAt                     string      `json:"updated_at,omitempty"`
-	CancellationMessage           string      `json:"cancellation_message,omitempty"`
-	CancellationMethod            string      `json:"cancellation_method,omitempty"`
-	CancelAtEndOfPeriod           bool        `json:"cancel_at_end_of_period,omitempty"`
-	CanceledAt                    string      `json:"canceled_at,omitempty"`
-	CurrentPeriodStartedAt        string      `json:"current_period_started_at,omitempty"`
-	PreviousState                 string      `json:"previous_state,omitempty"`
-	SignupPaymentID               int64       `json:"signup_payment_id,omitempty"`
-	SignupRevenue                 string      `json:"signup_revenue,omitempty"`
-	DelayedCancelAt               string      `json:"delayed_cancel_at,omitempty"`
-	CouponCode                    string      `json:"coupon_code,omitempty"`
-	PaymentCollectionMethod       string      `json:"payment_collection_method,omitempty"`
-	SnapDay                       string      `json:"snap_day,omitempty"`
-	ReasonCode                    string      `json:"reason_code,omitempty"`
-	ReceivesInvoiceEmails         bool        `json:"receives_invoice_emails,omitempty"`
-	Customer                      *Customer   `json:"customer,omitempty"`
-	Product                       *Product    `json:"product,omitempty"`
-	CreditCard                    *CreditCard `json:"credit_card,omitempty"`
-	PaymentType                   string      `json:"payment_type,omitempty"`
-	ReferralCode                  string      `json:"referral_code,omitempty"`
-	NextProductID                 int64       `json:"next_product_id,omitempty"`
-	CouponUseCount                int64       `json:"coupon_use_count,omitempty"`
-	CouponUsesAllowed             int64       `json:"coupon_uses_allowed,omitempty"`
-	NextProductHandle             string      `json:"next_product_handle,omitempty"`
-	StoredCredentialTransactionID int64       `json:"stored_credential_transaction_id,omitempty"`
+	ID                            int64         `json:"id,omitempty"`
+	State                         string        `json:"state,omitempty"`
+	BalanceInCents                int64         `json:"balance_in_cents,omitempty"`
+	TotalRevenueInCents           int64         `json:"total_revenue_in_cents,omitempty"`
+	ProductPriceInCents           int64         `json:"product_price_in_cents,omitempty"`
+	ProductVersionNumber          int64         `json:"product_version_number,omitempty"`
+	CurrentPeriodEndsAt           string        `json:"current_period_ends_at,omitempty"`
+	NextAssessmentAt              string        `json:"next_assessment_at,omitempty"`
+	TrialStartedAt                string        `json:"trial_started_at,omitempty"`
+	TrialEndedAt                  string        `json:"trial_ended_at,omitempty"`
+	ActivatedAt                   string        `json:"activated_at,omitempty"`
+	CreatedAt                     string        `json:"created_at,omitempty"`
+	UpdatedAt                     string        `json:"updated_at,omitempty"`
+	CancellationMessage           string        `json:"cancellation_message,omitempty"`
+	CancellationMethod            string        `json:"cancellation_method,omitempty"`
+	CancelAtEndOfPeriod           bool          `json:"cancel_at_end_of_period,omitempty"`
+	CanceledAt                    string        `json:"canceled_at,omitempty"`
+	CurrentPeriodStartedAt        string        `json:"current_period_started_at,omitempty"`
+	PreviousState                 string        `json:"previous_state,omitempty"`
+	SignupPaymentID               int64         `json:"signup_payment_id,omitempty"`
+	SignupRevenue                 string        `json:"signup_revenue,omitempty"`
+	DelayedCancelAt               string        `json:"delayed_cancel_at,omitempty"`
+	CouponCode                    string        `json:"coupon_code,omitempty"`
+	PaymentCollectionMethod       string        `json:"payment_collection_method,omitempty"`
+	SnapDay                       string        `json:"snap_day,omitempty"`
+	ReasonCode                    string        `json:"reason_code,omitempty"`
+	ReceivesInvoiceEmails         bool          `json:"receives_invoice_emails,omitempty"`
+	Customer                      *CustomerBody `json:"customer,omitempty"`
+	Product                       *Product      `json:"product,omitempty"`
+	CreditCard                    *CreditCard   `json:"credit_card,omitempty"`
+	PaymentType                   string        `json:"payment_type,omitempty"`
+	ReferralCode                  string        `json:"referral_code,omitempty"`
+	NextProductID                 int64         `json:"next_product_id,omitempty"`
+	CouponUseCount                int64         `json:"coupon_use_count,omitempty"`
+	CouponUsesAllowed             int64         `json:"coupon_uses_allowed,omitempty"`
+	NextProductHandle             string        `json:"next_product_handle,omitempty"`
+	StoredCredentialTransactionID int64         `json:"stored_credential_transaction_id,omitempty"`
 }
 
 type SubscriptionCancel struct {
@@ -276,14 +276,14 @@ func (req *SubscriptionRequest) CancelNow(client Client) (response *Subscription
 
 func (req *SubscriptionRequest) wrap() interface{} {
 	if req.Request != nil {
-		return struct {
+		return &struct {
 			Subscription *SubscriptionCreate `json:"subscription"`
 		}{
 			Subscription: req.Request,
 		}
 	}
 	if req.CancelRequest != nil {
-		return struct {
+		return &struct {
 			Subscription *SubscriptionCancel `json:"subscription"`
 		}{
 			Subscription: req.CancelRequest,
@@ -292,10 +292,10 @@ func (req *SubscriptionRequest) wrap() interface{} {
 	return nil
 }
 
-func (req *SubscriptionResponse) wrap() interface{} {
+func (res *SubscriptionResponse) wrap() interface{} {
 	return &struct {
 		Subscription *SubscriptionResponse `json:"subscription"`
 	}{
-		Subscription: req,
+		Subscription: res,
 	}
 }
