@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sort"
 )
 
 type ProductBody struct {
@@ -118,5 +119,12 @@ func GetProductsByFamily(client Client, familyID int64) (products []*Product, er
 		return
 	}
 	err = json.Unmarshal(body, &products)
+	if err != nil {
+		return
+	}
+	// return sorted by price
+	sort.Slice(products, func(i, j int) bool {
+		return products[i].Product.PriceInCents < products[j].Product.PriceInCents
+	})
 	return
 }

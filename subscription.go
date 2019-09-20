@@ -15,23 +15,23 @@ type SubscriptionRequest struct {
 }
 
 type SubscriptionCreate struct {
-	ProductHandle                 string                  `json:"product_handle,omitempty"`
-	ProductID                     string                  `json:"product_id,omitempty"`
-	Ref                           string                  `json:"ref,omitempty"`
-	CouponCode                    string                  `json:"coupon_code,omitempty"`
-	PaymentCollectionMethod       string                  `json:"payment_collection_method,omitempty"`
-	ReceivesInvoiceEmails         bool                    `json:"receives_invoice_emails,omitempty"`
-	NetTerms                      string                  `json:"net_terms,omitempty"`
-	CustomerID                    string                  `json:"customer_id,omitempty"`
-	NextBillingAt                 string                  `json:"next_billing_at,omitempty"`
-	StoredCredentialTransactionID int64                   `json:"stored_credential_transaction_id,omitempty"`
-	PaymentProfileID              string                  `json:"payment_profile_id,omitempty"`
-	CustomerAttributes            *CustomerBody           `json:"customer_attributes,omitempty"`
-	CreditCardAttributes          *CreditCard             `json:"credit_card_attributes,omitempty"`
-	BankAccountAttributes         *BankAccount            `json:"bank_account_attributes,omitempty"`
-	Components                    []*Component            `json:"components,omitempty"`
-	CalendarBilling               *CalendarBilling        `json:"calendar_billing,omitempty"`
-	Metafields                    *SubscriptionMetafields `json:"metafields,omitempty"`
+	ProductHandle                 string                   `json:"product_handle,omitempty"`
+	ProductID                     string                   `json:"product_id,omitempty"`
+	Ref                           string                   `json:"ref,omitempty"`
+	CouponCode                    string                   `json:"coupon_code,omitempty"`
+	PaymentCollectionMethod       string                   `json:"payment_collection_method,omitempty"`
+	ReceivesInvoiceEmails         bool                     `json:"receives_invoice_emails,omitempty"`
+	NetTerms                      string                   `json:"net_terms,omitempty"`
+	CustomerID                    string                   `json:"customer_id,omitempty"`
+	NextBillingAt                 string                   `json:"next_billing_at,omitempty"`
+	StoredCredentialTransactionID int64                    `json:"stored_credential_transaction_id,omitempty"`
+	PaymentProfileID              string                   `json:"payment_profile_id,omitempty"`
+	CustomerAttributes            *CustomerBody            `json:"customer_attributes,omitempty"`
+	CreditCardAttributes          *CreditCard              `json:"credit_card_attributes,omitempty"`
+	BankAccountAttributes         *BankAccount             `json:"bank_account_attributes,omitempty"`
+	Components                    []*SubscriptionComponent `json:"components,omitempty"`
+	CalendarBilling               *CalendarBilling         `json:"calendar_billing,omitempty"`
+	Metafields                    *SubscriptionMetafields  `json:"metafields,omitempty"`
 }
 
 type SubscriptionResponse struct {
@@ -121,7 +121,7 @@ type BankAccount struct {
 	BankAccountHolderType string `json:"bank_account_holder_type,omitempty"`
 }
 
-type Component struct {
+type SubscriptionComponent struct {
 	ComponentID       int64 `json:"component_id,omitempty"`
 	Enabled           bool  `json:"enabled,omitempty"`
 	UnitBalance       int64 `json:"unit_balance,omitempty"`
