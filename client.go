@@ -11,11 +11,13 @@ type Client interface {
 	Post([]byte, string) (*http.Response, error)
 	Put([]byte, string) (*http.Response, error)
 	Delete([]byte, string) (*http.Response, error)
+	GenerateSelfServiceLink(string, int64) string
 }
 
 type client struct {
-	url        string
-	httpClient *http.Client
+	url           string
+	siteSharedKey string
+	httpClient    *http.Client
 }
 
 type withBasicAuth struct {
@@ -57,7 +59,7 @@ func (c *client) Post(body []byte, uri string) (*http.Response, error) {
 }
 
 func (c *client) Put(body []byte, uri string) (*http.Response, error) {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", c.url, uri), bytes.NewReader(body))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/%s", c.url, uri), bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}

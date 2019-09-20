@@ -148,7 +148,6 @@ func (req *SubscriptionRequest) Create(client Client) (response *SubscriptionRes
 	if err != nil {
 		return
 	}
-	log.Println(string(jsonReq))
 	var res *http.Response
 	res, err = client.Post(jsonReq, "subscriptions.json")
 	if err != nil {
@@ -180,6 +179,7 @@ func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (re
 	if err != nil {
 		return
 	}
+	log.Println(string(jsonReq))
 	var res *http.Response
 	uri := fmt.Sprintf("subscriptions/%s.json", subscriptionID)
 	res, err = client.Put(jsonReq, uri)

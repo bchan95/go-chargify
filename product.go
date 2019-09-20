@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-type Product struct {
+type ProductBody struct {
 	ID                      int64             `json:"id,omitempty"`
 	Name                    string            `json:"name,omitempty"`
 	Handle                  string            `json:"handle,omitempty"`
@@ -44,6 +44,10 @@ type ProductFamily struct {
 	Handle      string `json:"handle,omitempty"`
 	AccountCode string `json:"account_code,omitempty"`
 	Description string `json:"description,omitempty"`
+}
+
+type Product struct {
+	Product *ProductBody `json:"product"`
 }
 
 func GetProductByID(client Client, productID int64) (product *Product, err error) {
@@ -91,5 +95,28 @@ func GetProductByHandle(client Client, handle string) (product *Product, err err
 	}
 	product = new(Product)
 	err = json.Unmarshal(body, product)
+	return
+}
+
+func GetProductsByFamily(client Client, familyID int64) (products []*Product, err error) {
+	if familyID == 0 {
+		return nil, NoID()
+	}
+	uri := fmt.Sprintf("product_families/%d/products.json", familyID)
+	var res *http.Response
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, &products)
 	return
 }

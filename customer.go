@@ -2,6 +2,7 @@ package chargify
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -62,6 +63,28 @@ func GetCustomer(client Client, customerID int64) (customer *Customer, err error
 	}
 	customer = new(Customer)
 	err = json.Unmarshal(body, customer)
+	return
+}
+
+func GetCustomerByEmail(client Client, email string) (customers []*Customer, err error) {
+	if email == "" {
+		return nil, errors.New("no email specified")
+	}
+	uri := fmt.Sprintf("customers.json?q=%s", email)
+	res, err := client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, &customers)
 	return
 }
 
