@@ -45,6 +45,7 @@ type ComponentBody struct {
 	ComponentID       int64 `json:"component_id,omitempty"`
 	SubscriptionID    int64 `json:"subscription_id,omitempty"`
 	AllocatedQuantity int64 `json:"allocated_quantity, omitempty"`
+	PricePointID      int64 `json:"price_point_id,omitempty"`
 }
 
 type Price struct {
@@ -55,6 +56,10 @@ type Price struct {
 	ComponentID         int64  `json:"component_id,omitempty"`
 	PricePointID        int64  `json:"price_point_id,omitempty"`
 	FormattedPricePoint string `json:"formatted_price_point,omitempty"`
+}
+
+type PricePoint struct {
+	PricePoint []*ComponentBody `json:"price_points,omitempty"`
 }
 
 func GetComponentAllocation(client Client, subscriptionID int64, componentID int64) (component *Component, err error) {
@@ -78,12 +83,13 @@ func GetComponentAllocation(client Client, subscriptionID int64, componentID int
 	return
 }
 
-func UpdateComponentQuantity(client Client, subscriptionID int64, componentID int64, quantity int64) (component *Component, err error) {
+func UpdateComponentQuantity(client Client, subscriptionID int64, componentID int64, quantity int64, upgradeCharge string) (component *Component, err error) {
 	uri := fmt.Sprintf("/subscriptions/%d/components/%d/allocations.json", subscriptionID, componentID)
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(&Allocation{
 		Allocation: &ComponentBody{
-			Quantity: quantity,
+			Quantity:      quantity,
+			UpgradeCharge: upgradeCharge,
 		},
 	})
 	if err != nil {
@@ -105,5 +111,26 @@ func UpdateComponentQuantity(client Client, subscriptionID int64, componentID in
 	}
 	component = new(Component)
 	err = json.Unmarshal(body, component)
+	return
+}
+
+func GetComponentPricePoints(client Client, componentID int64) (pricePoint *PricePoint, err error) {
+	uri := fmt.Sprintf("/components/%d/price_points.json", componentID)
+	var res *http.Response
+	res, err = client.Get(uri)
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	pricePoint = new(PricePoint)
+	err = json.Unmarshal(body, pricePoint)
 	return
 }

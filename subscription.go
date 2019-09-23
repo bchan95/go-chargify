@@ -200,12 +200,12 @@ func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (re
 	return
 }
 
-func GetSubscription(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
-	if subscriptionID == "" {
+func GetSubscription(client Client, subscriptionID int64) (response *SubscriptionResponse, err error) {
+	if subscriptionID == 0 {
 		return nil, NoID()
 	}
 	var res *http.Response
-	uri := fmt.Sprintf("subscriptions/%s.json", subscriptionID)
+	uri := fmt.Sprintf("subscriptions/%d.json", subscriptionID)
 	res, err = client.Get(uri)
 	if err != nil {
 		return
