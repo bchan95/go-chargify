@@ -1,2 +1,4 @@
 # go-chargify
-Go wrapper for Chargify. Currently only targets Customers and Subscriptions.
+Go wrapper for Chargify.
+
+This wrapper currently supports creating, getting, updating, and cancelling Subscriptions, getting, updating, and deleting Customers, getting Products, and getting Components.
