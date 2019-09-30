@@ -105,7 +105,7 @@ type CreditCard struct {
 	BillingZIP         string `json:"billing_zip,omitempty"`
 	CurrentVault       string `json:"current_vault,omitempty"`
 	CustomerVaultToken string `json:"customer_vault_token,omitempty"`
-	CustomerID         int64 `json:"customer_id,omitempty"`
+	CustomerID         int64  `json:"customer_id,omitempty"`
 	PaypalEmail        string `json:"paypal_email,omitempty"`
 	PaypalMethodNonce  string `json:"paypal_method_nonce,omitempty"`
 }

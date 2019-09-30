@@ -18,6 +18,7 @@ type Allocation struct {
 type ComponentBody struct {
 	ID                        int64    `json:"id,omitempty"`
 	Name                      string   `json:"name,omitempty"`
+	Handle                    string   `json:"handle,omitempty"`
 	PricingScheme             string   `json:"pricing_scheme,omitempty"`
 	UnitName                  string   `json:"unit_name,omitempty"`
 	UnitPrice                 string   `json:"unit_price,omitempty"`
