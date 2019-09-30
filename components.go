@@ -83,13 +83,14 @@ func GetComponentAllocation(client Client, subscriptionID int64, componentID int
 	return
 }
 
-func UpdateComponentQuantity(client Client, subscriptionID int64, componentID int64, quantity int64, upgradeCharge string) (component *Component, err error) {
+func UpdateComponentQuantity(client Client, subscriptionID int64, componentID int64, quantity int64, upgradeCharge string, pricePointID int64) (component *Component, err error) {
 	uri := fmt.Sprintf("/subscriptions/%d/components/%d/allocations.json", subscriptionID, componentID)
 	var jsonReq []byte
 	jsonReq, err = json.Marshal(&Allocation{
 		Allocation: &ComponentBody{
 			Quantity:      quantity,
 			UpgradeCharge: upgradeCharge,
+			PricePointID:  pricePointID,
 		},
 	})
 	if err != nil {
