@@ -63,7 +63,7 @@ type SubscriptionResponse struct {
 	ReasonCode                    string        `json:"reason_code,omitempty"`
 	ReceivesInvoiceEmails         bool          `json:"receives_invoice_emails,omitempty"`
 	Customer                      *CustomerBody `json:"customer,omitempty"`
-	Product                       *Product      `json:"product,omitempty"`
+	Product                       *ProductBody  `json:"product,omitempty"`
 	CreditCard                    *CreditCard   `json:"credit_card,omitempty"`
 	PaymentType                   string        `json:"payment_type,omitempty"`
 	ReferralCode                  string        `json:"referral_code,omitempty"`
