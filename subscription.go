@@ -168,7 +168,7 @@ func (req *SubscriptionRequest) Create(client Client) (response *SubscriptionRes
 }
 
 func (req *SubscriptionRequest) Update(client Client, subscriptionID int64) (response *SubscriptionResponse, err error) {
-	if subscriptionID == "" {
+	if subscriptionID == 0 {
 		return nil, NoID()
 	}
 	if req.Request == nil {
