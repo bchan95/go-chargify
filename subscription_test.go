@@ -28,7 +28,7 @@ func TestSubscriptionRequest_Create(t *testing.T) {
 	client := test.NewMockClient(ctrl)
 	req := &SubscriptionCreate{
 		ProductHandle: "basic",
-		CustomerAttributes: &Customer{
+		CustomerAttributes: &CustomerBody{
 			FirstName: "test1",
 			LastName:  "test2",
 			Email:     "test@talkatoo.ai",
@@ -106,14 +106,14 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 	}
 	type args struct {
 		client         Client
-		subscriptionID string
+		subscriptionID int64
 		stub           func()
 	}
 	ctrl := gomock.NewController(t)
 	client := test.NewMockClient(ctrl)
 	req := &SubscriptionCreate{
 		ProductHandle: "basic",
-		CustomerAttributes: &Customer{
+		CustomerAttributes: &CustomerBody{
 			FirstName: "test1",
 			LastName:  "test2",
 			Email:     "test@talkatoo.ai",
@@ -149,7 +149,7 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 			},
 			args: args{
 				client:         client,
-				subscriptionID: "123456789",
+				subscriptionID: 123456789,
 				stub: func() {
 					client.EXPECT().Put(gomock.Any(), "subscriptions/123456789.json").Return(&http.Response{
 						StatusCode: 200,
@@ -162,7 +162,7 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 		{
 			name: "create no req",
 			args: args{
-				subscriptionID: "123456789",
+				subscriptionID: 123456789,
 			},
 			wantErr: errors.New("missing request"),
 		},
@@ -195,14 +195,14 @@ func TestSubscriptionRequest_Update(t *testing.T) {
 func TestGetSubscription(t *testing.T) {
 	type args struct {
 		client         Client
-		subscriptionID string
+		subscriptionID int64
 		stub           func()
 	}
 	ctrl := gomock.NewController(t)
 	client := test.NewMockClient(ctrl)
 	res := &SubscriptionResponse{
 		ID: 123456789,
-		Customer: &Customer{
+		Customer: &CustomerBody{
 			FirstName: "test1",
 			LastName:  "test2",
 			Email:     "test@talkatoo.ai",
@@ -222,7 +222,7 @@ func TestGetSubscription(t *testing.T) {
 			name: "get",
 			args: args{
 				client:         client,
-				subscriptionID: "123456789",
+				subscriptionID: 123456789,
 				stub: func() {
 					client.EXPECT().Get("subscriptions/123456789.json").Return(&http.Response{
 						StatusCode: 200,
@@ -267,7 +267,7 @@ func TestSubscriptionRequest_CancelNow(t *testing.T) {
 	client := test.NewMockClient(ctrl)
 	res := &SubscriptionResponse{
 		ID: 123456789,
-		Customer: &Customer{
+		Customer: &CustomerBody{
 			FirstName: "test1",
 			LastName:  "test2",
 			Email:     "test@talkatoo.ai",

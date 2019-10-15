@@ -167,7 +167,7 @@ func (req *SubscriptionRequest) Create(client Client) (response *SubscriptionRes
 	return
 }
 
-func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (response *SubscriptionResponse, err error) {
+func (req *SubscriptionRequest) Update(client Client, subscriptionID int64) (response *SubscriptionResponse, err error) {
 	if subscriptionID == "" {
 		return nil, NoID()
 	}
@@ -181,7 +181,7 @@ func (req *SubscriptionRequest) Update(client Client, subscriptionID string) (re
 	}
 	log.Println(string(jsonReq))
 	var res *http.Response
-	uri := fmt.Sprintf("subscriptions/%s.json", subscriptionID)
+	uri := fmt.Sprintf("subscriptions/%d.json", subscriptionID)
 	res, err = client.Put(jsonReq, uri)
 	if err != nil {
 		return
