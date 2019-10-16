@@ -274,6 +274,54 @@ func (req *SubscriptionRequest) CancelNow(client Client) (response *Subscription
 	return
 }
 
+func ReactivateSubscription(client Client, subscriptionID int64) (response *SubscriptionResponse, err error) {
+	if subscriptionID == 0 {
+		return nil, NoID()
+	}
+	uri := fmt.Sprintf("subscriptions/%d/reactivate.json", subscriptionID)
+	var res *http.Response
+	res, err = client.Put(nil, uri)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	if err = checkError(res); err != nil {
+		return
+	}
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response.wrap())
+	return
+}
+
+func ResumeSubscription(client Client, subscriptionID int64) (response *SubscriptionResponse, err error) {
+	if subscriptionID == 0 {
+		return nil, NoID()
+	}
+	uri := fmt.Sprintf("subscriptions/%d/reactivate.json?resume=true", subscriptionID)
+	var res *http.Response
+	res, err = client.Put(nil, uri)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	if err = checkError(res); err != nil {
+		return
+	}
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(SubscriptionResponse)
+	err = json.Unmarshal(body, response.wrap())
+	return
+}
+
 func (req *SubscriptionRequest) wrap() interface{} {
 	if req.Request != nil {
 		return &struct {
