@@ -52,10 +52,10 @@ func GetCustomer(client Client, customerID int64) (customer *Customer, err error
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 	if err = checkError(res); err != nil {
 		return
 	}
-	defer res.Body.Close()
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -75,10 +75,10 @@ func GetCustomerByEmail(client Client, email string) (customers []*Customer, err
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 	if err = checkError(res); err != nil {
 		return
 	}
-	defer res.Body.Close()
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -95,10 +95,10 @@ func GetAllCustomers(client Client) (customers []*Customer, err error) {
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 	if err = checkError(res); err != nil {
 		return
 	}
-	defer res.Body.Close()
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -118,10 +118,10 @@ func GetCustomerSubscriptions(client Client, customerID int64) (subscriptions []
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 	if err = checkError(res); err != nil {
 		return
 	}
-	defer res.Body.Close()
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -146,10 +146,10 @@ func (c *Customer) Update(client Client, customerID int64) (customer *Customer, 
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 	if err = checkError(res); err != nil {
 		return
 	}
-	defer res.Body.Close()
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -170,6 +170,6 @@ func DeleteCustomer(client Client, customerID int64) (err error) {
 	if err != nil {
 		return
 	}
-	err = checkError(res)
-	return
+	defer res.Body.Close()
+	return checkError(res)
 }
