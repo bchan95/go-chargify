@@ -13,6 +13,11 @@ type Error struct {
 	Errors []string `json:"errors"`
 }
 
+var (
+	NotFound = errors.New("not found")
+	Unrecognized = errors.New("unrecognized response code")
+)
+
 func checkError(res *http.Response) error {
 	code := res.StatusCode
 	switch code {
@@ -25,9 +30,9 @@ func checkError(res *http.Response) error {
 	case 422:
 		return extractErr(res.Body)
 	case 404:
-		return errors.New("not found")
+		return NotFound
 	default:
-		return errors.New("unrecognized response code")
+		return Unrecognized
 	}
 }
 
