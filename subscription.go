@@ -17,7 +17,7 @@ type SubscriptionRequest struct {
 type SubscriptionCreate struct {
 	ProductHandle                 string                   `json:"product_handle,omitempty"`
 	ProductID                     string                   `json:"product_id,omitempty"`
-	ProductPricePointHandle       string                   `json:"product_price_point_handle, omitempty"`
+	ProductPricePointHandle       string                   `json:"product_price_point_handle,omitempty"`
 	Ref                           string                   `json:"ref,omitempty"`
 	CouponCode                    string                   `json:"coupon_code,omitempty"`
 	PaymentCollectionMethod       string                   `json:"payment_collection_method,omitempty"`
