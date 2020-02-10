@@ -14,12 +14,14 @@ type Migration struct {
 }
 
 type MigrationBody struct {
-	ProductId            int64 `json:"product_id,omitempty"`
-	ProductPricePointId  int64 `json:"product_price_point_id,omitempty"`
-	IncludeTrial         bool  `json:"include_trial,omitempty"`
-	IncludeInitialCharge bool  `json:"include_initial_charge,omitempty"`
-	IncludeCoupons       bool  `json:"include_coupons,omitempty"`
-	PreservePeriod       bool  `json:"preserve_period,omitempty"`
+	ProductId               int64  `json:"product_id,omitempty"`
+	ProductHandle           string `json:"product_handle,omitempty"`
+	ProductPricePointId     int64  `json:"product_price_point_id,omitempty"`
+	ProductPricePointHandle string `json:"product_price_point_handle,omitempty"`
+	IncludeTrial            bool   `json:"include_trial,omitempty"`
+	IncludeInitialCharge    bool   `json:"include_initial_charge,omitempty"`
+	IncludeCoupons          bool   `json:"include_coupons,omitempty"`
+	PreservePeriod          bool   `json:"preserve_period,omitempty"`
 }
 
 type MigrationResponse struct {
