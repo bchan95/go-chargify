@@ -22,6 +22,7 @@ type CustomerBody struct {
 	Address2                 string       `json:"address_2,omitempty"`
 	City                     string       `json:"city,omitempty"`
 	State                    string       `json:"state,omitempty"`
+	Zip                      string       `json:"zip"`
 	Country                  string       `json:"country,omitempty"`
 	Phone                    string       `json:"phone,omitempty"`
 	Verfied                  bool         `json:"verfied,omitempty"`
