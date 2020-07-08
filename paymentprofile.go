@@ -9,7 +9,7 @@ import (
 )
 
 type PaymentProfile struct {
-	CustomerID         int64  `json:"customer_id"`
+	CustomerID         int64  `json:"customer_id,omitempty"`
 	ChargifyToken      string `json:"chargify_token,omitempty"`
 	ID                 int64  `json:"id,omitempty"`
 	PaymentType        string `json:"payment_type,omitempty"`
@@ -74,7 +74,7 @@ func (pp *PaymentProfile) Update(client Client) (response *PaymentProfileRespons
 	if pp.ChargifyToken != "" && pp.CustomerID == 0 {
 		return nil, errors.New("cannot pass chargify token without customer id")
 	}
-	uri := fmt.Sprintf("payment_profile/%d.json", pp.ID)
+	uri := fmt.Sprintf("payment_profiles/%d.json", pp.ID)
 	updateRequest := &PaymentProfileRequest{
 		PaymentProfile: pp,
 	}
