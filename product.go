@@ -34,6 +34,7 @@ type ProductBody struct {
 	UpdateReturnURL         string            `json:"update_return_url,omitempty"`
 	UpdateReturnParams      string            `json:"update_return_params,omitempty"`
 	ProductFamily           *ProductFamily    `json:"product_family,omitempty"`
+	ProductPricePointHandle string            `json:"product_price_point_handle,omitempty"`
 	PublicSignupPage        *PublicSignupPage `json:"public_signup_page,omitempty"`
 	Taxable                 bool              `json:"taxable,omitempty"`
 	VersionNumber           int64             `json:"version_number,omitempty"`
