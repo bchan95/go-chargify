@@ -129,3 +129,32 @@ func GetProductsByFamily(client Client, familyID int64) (products []*Product, er
 	})
 	return
 }
+
+func CreateProduct(client Client, familyId int64, product *Product) (response *Product, err error) {
+	if product.Product == nil {
+		return nil, errors.New("missing request")
+	}
+	// have to nest this because chargify is a mess
+	var jsonReq []byte
+	jsonReq, err = json.Marshal(product)
+	if err != nil {
+		return
+	}
+	var res *http.Response
+	res, err = client.Post(jsonReq, fmt.Sprintf("product_families/%d/products.json", familyId))
+	if err != nil {
+		return
+	}
+	if err = checkError(res); err != nil {
+		return
+	}
+	defer res.Body.Close()
+	var body []byte
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	response = new(Product)
+	err = json.Unmarshal(body, response)
+	return
+}
