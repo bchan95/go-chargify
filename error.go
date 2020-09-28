@@ -33,8 +33,12 @@ func checkError(res *http.Response) error {
 	case 404:
 		return NotFound
 	default:
-		log.Printf("Unrecognized: %d", res.StatusCode)
-		return extractErr(res.Body)
+
+		defer res.Body.Close()
+		byteBody, _ := ioutil.ReadAll(res.Body)
+		log.Println(string(byteBody))
+		log.Printf("Unrecognized: %d: ")
+		return Unrecognized
 	}
 }
 
