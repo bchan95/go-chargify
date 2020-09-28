@@ -34,7 +34,7 @@ func checkError(res *http.Response) error {
 		return NotFound
 	default:
 		log.Printf("Unrecognized: %d", res.StatusCode)
-		return Unrecognized
+		return extractErr(res.Body)
 	}
 }
 
