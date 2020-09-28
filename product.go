@@ -21,8 +21,8 @@ type ProductBody struct {
 	InitialChargeInCents    int64             `json:"initial_charge_in_cents,omitempty"`
 	ExpirationInterval      int64             `json:"expiration_interval,omitempty"`
 	ExpirationIntervalUnit  string            `json:"expiration_interval_unit,omitempty"`
-	TrialPriceInCents       int64             `json:"trial_price_in_cents"`
-	TrialInterval           int64             `json:"trial_interval"`
+	TrialPriceInCents       int64             `json:"trial_price_in_cents,omitempty"`
+	TrialInterval           int64             `json:"trial_interval,omitempty"`
 	TrialIntervalUnit       string            `json:"trial_interval_unit,omitempty"`
 	InitialChargeAfterTrial bool              `json:"initial_charge_after_trial,omitempty"`
 	ReturnParams            string            `json:"return_params,omitempty"`
