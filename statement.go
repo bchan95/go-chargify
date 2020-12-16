@@ -149,7 +149,11 @@ func GetStatement(client Client, statementId int64) (statement *Statement, err e
 	if err != nil {
 		return
 	}
-	statement = new(Statement)
-	err = json.Unmarshal(body, statement)
-	return
+	nestedStatement := new(struct {
+		Statement *Statement `json:"statement"`
+	})
+	if err = json.Unmarshal(body, nestedStatement); err != nil {
+		return
+	}
+	return nestedStatement.Statement, nil
 }
