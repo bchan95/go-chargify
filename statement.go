@@ -130,6 +130,32 @@ func GetSubscriptionStatements(client Client, subscriptionId int64, pageNumber i
 	return statements, nil
 }
 
+func GetStatemementIds(client Client, subscriptionId int64, pageNumber int32, perPage int32) ([]int64, error) {
+	if subscriptionId == 0 {
+		return nil, NoID()
+	}
+	uri := fmt.Sprintf("subscriptions/%d/statements/ids.json?direction=desc&per_page=%d&page=%d", subscriptionId, perPage, pageNumber)
+	res, err := client.Get(uri)
+	if err != nil {
+		return nil, err
+	}
+	if err = checkError(res); err != nil {
+		return nil, err
+	}
+	statementIds := &struct {
+		StatementIds []int64 `json:"statement_ids"`
+	}{}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	if err = json.Unmarshal(body, &statementIds); err != nil {
+		return nil, err
+	}
+	return statementIds.StatementIds, nil
+}
+
 func GetStatement(client Client, statementId int64) (statement *Statement, err error) {
 	if statementId == 0 {
 		return nil, NoID()
