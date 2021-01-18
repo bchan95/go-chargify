@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -14,7 +15,7 @@ type Error struct {
 }
 
 var (
-	NotFound = errors.New("not found")
+	NotFound     = errors.New("not found")
 	Unrecognized = errors.New("unrecognized response code")
 )
 
@@ -32,6 +33,11 @@ func checkError(res *http.Response) error {
 	case 404:
 		return NotFound
 	default:
+
+		defer res.Body.Close()
+		byteBody, _ := ioutil.ReadAll(res.Body)
+		log.Println(string(byteBody))
+		log.Printf("Unrecognized: %d: ")
 		return Unrecognized
 	}
 }

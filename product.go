@@ -66,6 +66,9 @@ func GetProductByID(client Client, productID int64) (product *Product, err error
 		return
 	}
 	defer res.Body.Close()
+	if err = checkError(res); err != nil {
+		return
+	}
 	var body []byte
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
