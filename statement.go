@@ -38,7 +38,7 @@ type Statement struct {
 	UpdatedAt                string         `json:"updated_at,omitempty"`
 	TotalInCents             int64          `json:"total_in_cents,omitempty"`
 	Transactions             []*Transaction `json:"transactions,omitempty"`
-	Events                   []*Event       `json:"events,omitempty"`
+	Events                   []*Events      `json:"events,omitempty"`
 }
 
 type Transaction struct {
@@ -89,6 +89,10 @@ type TaxRule struct {
 	Rate             string `json:"rate,omitempty"`
 	TaxAmountInCents int64  `json:"tax_amount_in_cents,omitempty"`
 	Description      string `json:"description,omitempty"`
+}
+
+type Events struct {
+	Event *Event `json:"event"`
 }
 
 type Event struct {
