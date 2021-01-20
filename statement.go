@@ -92,7 +92,7 @@ type TaxRule struct {
 }
 
 type Events struct {
-	Event *Event `json:"event"`
+	Event *Event `json:"event,omitempty"`
 }
 
 type Event struct {
