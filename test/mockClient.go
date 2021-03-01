@@ -84,3 +84,7 @@ func (m *MockClient) Put(arg0 []byte, arg1 string) (*http.Response, error) {
 func (mr *MockClientMockRecorder) Put(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*MockClient)(nil).Put), arg0, arg1)
 }
+
+func (mr *MockClient) GenerateSelfServiceLink(arg0 string, arg1 int64) string {
+	return "mock-self-service"
+}

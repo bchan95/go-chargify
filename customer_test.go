@@ -1,7 +1,7 @@
 package chargify
 
 import (
-	"backend-services/chargify/test"
+	"github.com/bchan95/go-chargify/test"
 	"bytes"
 	"encoding/json"
 	"github.com/golang/mock/gomock"
