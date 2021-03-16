@@ -3,10 +3,11 @@ package chargify
 import (
 	"errors"
 	"io/ioutil"
-	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func NewClient(subdomain string) (Client, error) {
@@ -22,10 +23,18 @@ func NewClient(subdomain string) (Client, error) {
 		return nil, errors.New("no subdomain specified")
 	}
 	url := constructUrl(subdomain)
-	log.Println(url)
 	httpClient := http.DefaultClient
-
-	rt := WithBasicAuth(httpClient.Transport, apiKey)
+	keepAliveTimeout := 600 * time.Second
+	timeout := 2 * time.Second
+	defaultTransport := &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: keepAliveTimeout,
+		}).DialContext,
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 100,
+	}
+	rt := WithBasicAuth(defaultTransport, apiKey)
 	httpClient.Transport = rt
 	return &client{url, selfServiceKey, httpClient}, nil
 }
