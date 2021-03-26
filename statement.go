@@ -58,7 +58,7 @@ type Transaction struct {
 	GatewayOrderId         string      `json:"gateway_order_id,omitempty"`
 	PaymentId              int64       `json:"payment_id,omitempty"`
 	ProductId              int64       `json:"product_id,omitempty"`
-	TaxId                  string      `json:"tax_id,omitempty"`
+	TaxId                  int64      `json:"tax_id,omitempty"`
 	ComponentId            int64       `json:"component_id,omitempty"`
 	StatementId            int64       `json:"statement_id,omitempty"`
 	CustomerId             int64       `json:"customer_id,omitempty"`
@@ -70,7 +70,7 @@ type Transaction struct {
 }
 
 type Taxation struct {
-	TaxId                 string     `json:"tax_id,omitempty"`
+	TaxId                 int64     `json:"tax_id,omitempty"`
 	TaxChargeId           int64      `json:"tax_charge_id,omitempty"`
 	TaxName               string     `json:"tax_name,omitempty"`
 	Rate                  string     `json:"rate,omitempty"`
